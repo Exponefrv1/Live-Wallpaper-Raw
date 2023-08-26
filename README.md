@@ -7,8 +7,10 @@ Probably, it'll help someone in representation of Live Wallpapers for Desktop.
 Uses a lot of CPU resources.
 
 ## Requirements
+Included headers:
 *  Windows.h
 *  Dshow.h
+
 DirectShow requires two additional libraries:  
 *  Quartz
 *  Strmiids
