@@ -1,6 +1,6 @@
 ![Demo](demo_Trim.gif)
 
-# Live Wallpapers with windows 8+ support
+# Live Wallpapers with Windows 8+ support
 Raw code of live wallpapers for overview.  
 Finds WorkerW window and creates new one as child.  
 Probably, it'll help someone in representation of Live Wallpapers for Desktop.  
