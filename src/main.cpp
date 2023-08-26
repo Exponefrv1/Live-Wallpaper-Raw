@@ -4,6 +4,16 @@
 #pragma comment(lib, "Quartz")
 #pragma comment(lib, "Strmiids")
 
+// When you change the wallpaper a new WorkerW window is created.
+// This window is behind the desktop icons, so we need to create such a window for our purpose.
+// To do this, we send a message to a Program Manager.
+// Next, we need to get the handler of the created window, we use EnumWindows.
+// From there, we can check if the current window contains a child named "SHELLDLL_DefView"
+// which indicates that the current window represents the desktop icons.
+// We then take the next sibling of that window.
+// After we got the handler, we can display whatever we want in this window.
+// In my case, I created a new window that is a child of WorkerW and rendered a video file in it.
+
 int WINAPI WinMain(
 	_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -11,8 +21,10 @@ int WINAPI WinMain(
 	_In_ int       nCmdShow
 ) {
 
+	// Find Program Manager window
 	HWND progman = FindWindow(L"Progman", NULL);
 	
+	// Send message to Program Manager to create a new WorkerW window
 	SendMessageTimeout(
 		progman,
 		0x052C,
@@ -23,12 +35,14 @@ int WINAPI WinMain(
 		NULL
 	);
 	
+	// Obtain handler for this WorkerW window
 	EnumWindows(EnumWindowsProc, 0);
 	
 	if (!workerw) {
 		return 1;
 	}
 
+	// Create child window
 	const wchar_t CLASS_NAME[] = L"Wallpapers Class";
 
 	WNDCLASS wc = { };
@@ -51,21 +65,28 @@ int WINAPI WinMain(
 		NULL
 	);
 
+
+	// Initialize DirectShow for rendering
 	if (InitializeDirectShow(wallpapers) != S_OK) {
 		return 1;
 	}
 
+	// Get duration of videofile for seeking
 	LONGLONG targetPosition;
 	pMediaSeeking->GetDuration(&targetPosition);
 
+	// Run render
 	pControl->Run();
 
+	// Message loop
 	MSG msg = { };
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 
+		// Get current position of playing video and set it to 0
+		// if current position > video duration (loop video)
 		LONGLONG currentPosition;
 		pMediaSeeking->GetCurrentPosition(&currentPosition);
 		if (currentPosition >= targetPosition) {
@@ -78,12 +99,12 @@ int WINAPI WinMain(
 				AM_SEEKING_NoPositioning
 			);
 			pControl->Run();
-			OutputDebugString(L"Position is set to 0\n");
 		}
 	}
 	return 0;
 }
 
+// DirectShow init function (see DirectShow API)
 HRESULT InitializeDirectShow(HWND hwnd) {
 	CoInitialize(NULL);
 	CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, (void**)&pGraph);
@@ -98,6 +119,7 @@ HRESULT InitializeDirectShow(HWND hwnd) {
 	return S_OK;
 }
 
+// Process window messages
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	switch (uMsg) {
 		case WM_PAINT:
@@ -118,6 +140,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 	return 0;
 }
 
+// Find our WorkerW window
 BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam) {
 	HWND window = FindWindowEx(
 		hWnd,

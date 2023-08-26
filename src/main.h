@@ -10,7 +10,7 @@
 // File must be in .avi format
 #define WP_PATH L"C:\\wallpapers\\example.avi"
 
-// Prototypes
+// Function prototypes
 int WINAPI WinMain(
 	_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
