@@ -16,4 +16,5 @@ DirectShow requires two additional requirements:
 
 ## Instructions
 Edit WIDTH, HEIGHT and WP_PATH macros in "main.h".  
-Compile and run.
+Compile and run.  
+To close use Task Manager.
