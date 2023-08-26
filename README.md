@@ -15,5 +15,5 @@ DirectShow requires two additional requirements:
 *  Strmiids.lib
 
 ## Instructions
-Edit WIDTH, HEIGHT and WP_PATH macros.  
+Edit WIDTH, HEIGHT and WP_PATH macros in "main.h".  
 Compile and run.
