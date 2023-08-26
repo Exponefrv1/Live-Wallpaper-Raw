@@ -11,9 +11,9 @@ Included headers:
 *  Windows.h
 *  Dshow.h
 
-DirectShow requires two additional libraries:  
-*  Quartz
-*  Strmiids
+DirectShow requires two additional requirements:  
+*  Quartz.lib
+*  Strmiids.lib
 
 ## Instructions
 Edit WIDTH, HEIGHT and WP_PATH macros.  
