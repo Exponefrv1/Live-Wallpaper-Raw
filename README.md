@@ -1,4 +1,4 @@
-![Demo](demo_Trim.mp4)
+![Demo](demo_Trim.gif)
 
 # Live-Wallpapers-Raw
 Raw code of live wallpapers for overview.  
